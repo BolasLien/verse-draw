@@ -7,6 +7,7 @@ const apiCard = {
   description: '神愛世人，甚至將他的獨生子賜給他們。 — 約翰福音 3:16',
   link: 'https://bible-api.com/JHN%203%3A16?translation=cuv',
 };
+const revealWait = { timeout: 4000 };
 
 function mockSuccessfulCard() {
   vi.stubGlobal(
@@ -53,7 +54,7 @@ describe('App draw flow', () => {
 
     expect(fetch).toHaveBeenCalledWith('https://bible-api.com/data/cuv/random');
 
-    expect(await screen.findByText(apiCard.description)).toBeInTheDocument();
+    expect(await screen.findByText(apiCard.description, undefined, revealWait)).toBeInTheDocument();
     const link = screen.getByRole('link', { name: '經文連結' });
     expect(link).toHaveAttribute('href', apiCard.link);
 
@@ -73,7 +74,7 @@ describe('App draw flow', () => {
     fireEvent.pointerUp(drawCard, { pointerId: 1, clientY: 230 });
 
     expect(fetch).toHaveBeenCalledWith('https://bible-api.com/data/cuv/random');
-    expect(await screen.findByText(apiCard.description)).toBeInTheDocument();
+    expect(await screen.findByText(apiCard.description, undefined, revealWait)).toBeInTheDocument();
   });
 
   test('shows a retryable error state when fetching the card fails', async () => {
@@ -108,7 +109,9 @@ describe('App draw flow', () => {
 
     await user.click(screen.getByRole('button', { name: '向下拖曳抽卡' }));
 
-    expect(await screen.findByText('耶和華是我的牧者，我必不致缺乏。 — 詩篇 23:1')).toBeInTheDocument();
+    expect(
+      await screen.findByText('耶和華是我的牧者，我必不致缺乏。 — 詩篇 23:1', undefined, revealWait),
+    ).toBeInTheDocument();
     expect(screen.getByText('備用經文')).toBeInTheDocument();
   });
 });

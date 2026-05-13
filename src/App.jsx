@@ -13,7 +13,7 @@ function DrawScene({ status, onDraw }) {
   const [dragOffset, setDragOffset] = useState(0);
   const startYRef = useRef(null);
   const hasTriggeredRef = useRef(false);
-  const isBusy = status === 'drawing' || status === 'revealing';
+  const isBusy = status === 'drawing' || status === 'descending' || status === 'revealing';
 
   function triggerDraw() {
     if (isBusy || hasTriggeredRef.current) {
@@ -89,6 +89,7 @@ function DrawScene({ status, onDraw }) {
 
 function RevealScene({ status, card, onReset }) {
   const isRevealed = status === 'revealed';
+  const isDescending = status === 'descending';
 
   function handleSceneClick(event) {
     if (event.target.closest('a')) {
@@ -104,12 +105,14 @@ function RevealScene({ status, card, onReset }) {
       aria-label="抽卡結果"
       onClick={handleSceneClick}
     >
-      <article className={`result-card ${isRevealed ? 'result-card--revealed' : ''}`}>
+      <article
+        className={`result-card ${isDescending ? 'result-card--descending' : ''} ${isRevealed ? 'result-card--revealed' : ''}`}
+      >
         <div className="result-card__back">VERSE</div>
         <div className="result-card__front">
           <div className="result-card__badge">{card.isFallback ? '備用經文' : '今日經文'}</div>
           <p className="result-card__description">
-            {isRevealed ? card.description : '資料讀取中...'}
+            {isDescending ? '經文正在降下...' : isRevealed ? card.description : '資料讀取中...'}
           </p>
           {isRevealed && card.link ? (
             <a className="result-card__link" href={card.link} target="_blank" rel="noreferrer">
@@ -154,10 +157,14 @@ export default function App() {
     try {
       const nextCard = await fetchBibleCard();
       setCard(nextCard);
-      setStatus('revealing');
+      setStatus('descending');
       window.setTimeout(() => {
-        setStatus('revealed');
-      }, 350);
+        setStatus('revealing');
+
+        window.setTimeout(() => {
+          setStatus('revealed');
+        }, 850);
+      }, 1800);
     } catch {
       setStatus('error');
     }
@@ -174,7 +181,7 @@ export default function App() {
         {status === 'idle' || status === 'drawing' ? (
           <DrawScene status={status} onDraw={handleDraw} />
         ) : null}
-        {status === 'revealing' || status === 'revealed' ? (
+        {status === 'descending' || status === 'revealing' || status === 'revealed' ? (
           <RevealScene status={status} card={card} onReset={handleReset} />
         ) : null}
         {status === 'error' ? <ErrorScene onReset={handleReset} /> : null}

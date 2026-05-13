@@ -188,7 +188,7 @@ a {
   aspect-ratio: 0.68;
   position: relative;
   transform-style: preserve-3d;
-  animation: card-enter 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  transform: translate3d(0, -82vh, 0) rotateY(0deg) scale(0.18);
 }
 
 .result-card__back,
@@ -225,7 +225,11 @@ a {
 }
 
 .result-card--revealed {
-  animation: card-reveal 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: card-reveal 850ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.result-card--descending {
+  animation: card-descend 1800ms cubic-bezier(0.22, 0.74, 0.2, 1) forwards;
 }
 
 .result-card__badge {
@@ -330,21 +334,29 @@ a {
   white-space: nowrap;
 }
 
-@keyframes card-enter {
-  from {
-    transform: translate3d(0, -36%, 0) rotateY(0deg) scale(0.36);
+@keyframes card-descend {
+  0% {
+    transform: translate3d(0, -82vh, 0) rotateY(0deg) scale(0.18);
     opacity: 0;
   }
 
-  to {
-    transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
+  18% {
+    opacity: 1;
+  }
+
+  62% {
+    transform: translate3d(0, -18vh, 0) rotateY(540deg) scale(0.42);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) rotateY(720deg) scale(0.5);
     opacity: 1;
   }
 }
 
 @keyframes card-reveal {
   from {
-    transform: rotateY(0deg) scale(1);
+    transform: rotateY(0deg) scale(0.5);
   }
 
   to {
