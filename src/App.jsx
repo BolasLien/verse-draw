@@ -90,6 +90,7 @@ function DrawScene({ status, onDraw }) {
 function RevealScene({ status, card, onReset }) {
   const isRevealed = status === 'revealed';
   const isDescending = status === 'descending';
+  const isRevealing = status === 'revealing';
 
   function handleSceneClick(event) {
     if (event.target.closest('a')) {
@@ -106,24 +107,26 @@ function RevealScene({ status, card, onReset }) {
       onClick={handleSceneClick}
     >
       <article
-        className={`result-card ${isDescending ? 'result-card--descending' : ''} ${isRevealed ? 'result-card--revealed' : ''}`}
+        className={`result-card ${isDescending ? 'result-card--descending' : ''} ${isRevealing ? 'result-card--revealing' : ''} ${isRevealed ? 'result-card--revealed' : ''}`}
       >
-        <div className="result-card__back">VERSE</div>
-        <div className="result-card__front">
-          <div className="result-card__badge">{card.isFallback ? '備用經文' : '今日經文'}</div>
-          <p className="result-card__description">
-            {isDescending ? '經文正在降下...' : isRevealed ? card.description : '資料讀取中...'}
-          </p>
-          {isRevealed && card.link ? (
-            <a className="result-card__link" href={card.link} target="_blank" rel="noreferrer">
-              <ExternalLink aria-hidden="true" size={16} />
-              經文連結
-            </a>
-          ) : null}
-          <button className="result-card__hint" type="button" aria-label="回到抽卡畫面" onClick={onReset}>
-            <RotateCcw aria-hidden="true" size={15} />
-            點擊畫面再抽一次
-          </button>
+        <div className="result-card__inner">
+          <div className="result-card__back">VERSE</div>
+          <div className="result-card__front">
+            <div className="result-card__badge">{card.isFallback ? '備用經文' : '今日經文'}</div>
+            <p className="result-card__description">
+              {isDescending ? '經文正在降下...' : isRevealed ? card.description : '資料讀取中...'}
+            </p>
+            {isRevealed && card.link ? (
+              <a className="result-card__link" href={card.link} target="_blank" rel="noreferrer">
+                <ExternalLink aria-hidden="true" size={16} />
+                經文連結
+              </a>
+            ) : null}
+            <button className="result-card__hint" type="button" aria-label="回到抽卡畫面" onClick={onReset}>
+              <RotateCcw aria-hidden="true" size={15} />
+              點擊畫面再抽一次
+            </button>
+          </div>
         </div>
       </article>
     </section>

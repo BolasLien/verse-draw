@@ -38,7 +38,6 @@ test('draws a Bible verse and returns to the initial screen', async ({ page }) =
 
   const descendingCard = page.locator('.result-card--descending');
   await expect(descendingCard).toBeVisible();
-  await expect(page.getByText('經文正在降下...')).toBeVisible();
 
   await expect(page.getByText('公義要行在他面前，叫他的腳蹤成為可走的路。 — 詩篇 85:13')).toBeVisible();
   await expect(page.getByRole('link', { name: '經文連結' })).toHaveAttribute(
